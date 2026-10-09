@@ -115,7 +115,8 @@ namespace Cosmos.VisualStudio.Core
                     continue;
                 }
                 string kind = disk.Type == "nvme" ? "nvme" : "ahci";
-                string absPath = Path.IsPathRooted(disk.Path) ? disk.Path : Path.Combine(projectDir, disk.Path);
+                // GetFullPath turns the '/' of configs shared with VS Code into '\' on Windows.
+                string absPath = Path.GetFullPath(Path.Combine(projectDir, disk.Path));
 
                 if (!File.Exists(absPath))
                 {
