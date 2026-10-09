@@ -14,6 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- The XamlTypes the Project Properties pages are built from ship only in
+         MSBuild's .NET Framework assembly; nothing the tests touch needs more
+         of the Framework than .NET provides. -->
+    <PackageDownload Include="Microsoft.Build.Framework" Version="[17.14.28]" />
+    <Reference Include="Microsoft.Build.Framework" HintPath="$(NuGetPackageRoot)microsoft.build.framework/17.14.28/lib/net472/Microsoft.Build.Framework.dll" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="xunit" Version="2.9.3" />

@@ -57,26 +57,26 @@ namespace Cosmos.VisualStudio.Tests
 
             props.EnableAudio = true;
             props.EnableNetwork = false;
-            props.GccFlags = "-O2 -DFOO=<1>";
+            props.CCompilerFlags = "-O2 -DFOO=<1>";
             props.TargetArch = "arm64";
             ProjectConfig.Save(csproj, props);
 
             string content = File.ReadAllText(csproj);
             Assert.DoesNotContain("CosmosEnableAudio", content);
             Assert.Contains("<CosmosEnableNetwork>false</CosmosEnableNetwork>", content);
-            Assert.Contains("<GCCCompilerFlags>-O2 -DFOO=&lt;1&gt;</GCCCompilerFlags>", content);
+            Assert.Contains("<CCCompilerFlags>-O2 -DFOO=&lt;1&gt;</CCCompilerFlags>", content);
             // The removed property leaves no blank line behind.
             Assert.DoesNotContain("\n    \n", content);
 
             ProjectProperties reread = ProjectConfig.Parse(csproj);
-            Assert.Equal("-O2 -DFOO=<1>", reread.GccFlags);
+            Assert.Equal("-O2 -DFOO=<1>", reread.CCompilerFlags);
             Assert.Equal("arm64", reread.TargetArch);
             Assert.False(reread.EnableNetwork);
             Assert.True(reread.EnableAudio);
 
-            props.GccFlags = "";
+            props.CCompilerFlags = "";
             ProjectConfig.Save(csproj, props);
-            Assert.DoesNotContain("GCCCompilerFlags", File.ReadAllText(csproj));
+            Assert.DoesNotContain("CCCompilerFlags", File.ReadAllText(csproj));
         }
 
         [Fact]

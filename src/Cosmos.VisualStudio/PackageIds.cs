@@ -68,7 +68,6 @@ namespace Cosmos.VisualStudio
         public const int CtxRun = 0x0121;
         public const int CtxDebug = 0x0122;
         public const int CtxClean = 0x0123;
-        public const int CtxProperties = 0x0124;
 
         public const int ThreadsToolbar = 0x1003;
         public const int GCToolbar = 0x1004;

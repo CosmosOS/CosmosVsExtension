@@ -24,6 +24,8 @@
   <ItemGroup>
     <!-- Visual Studio provides these assemblies at runtime; compile against them only. -->
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.14.40265" ExcludeAssets="runtime" />
+    <!-- The project system (CPS) the Project Properties pages extend. -->
+    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="17.9.380" ExcludeAssets="runtime" />
     <!-- The VSIX build steps (command table, pkgdef, .vsix) only run on Windows.
          Elsewhere the project still compiles, so changes can be checked on Linux or macOS. -->
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.14.2142" PrivateAssets="all" Condition="'$(OS)' == 'Windows_NT'" />
@@ -36,6 +38,7 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Design" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,7 +17,11 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Cosmos.VisualStudio.ToolWindows
 {
-    /// <summary>The kernel's properties, edited in a document tab and saved as you type.</summary>
+    /// <summary>
+    /// The kernel's properties, edited in a document tab and saved as you type,
+    /// for a kernel opened as a folder. A kernel loaded as a project edits them
+    /// in Visual Studio's Project Properties instead (ProjectSystem/).
+    /// </summary>
     [Guid(PackageGuids.PropertiesWindowString)]
     public sealed class KernelPropertiesWindow : ToolWindowPane
     {
@@ -179,7 +183,7 @@ namespace Cosmos.VisualStudio.ToolWindows
             framework.SelectionChanged += (s, e) => { props.TargetFramework = Selected(framework) ?? props.TargetFramework; Save(); };
             panel.Children.Add(Theme.Field(".NET Version", framework));
 
-            ComboBox arch = Combo(new[] { new QemuChoice("x64", "x64 (Intel/AMD 64-bit)"), new QemuChoice("arm64", "ARM64") }, props.TargetArch);
+            ComboBox arch = Combo(KernelConfigSettings.Architectures, props.TargetArch);
             arch.SelectionChanged += (s, e) =>
             {
                 string chosen = Selected(arch);
@@ -268,8 +272,8 @@ namespace Cosmos.VisualStudio.ToolWindows
 
         private FrameworkElement Advanced()
         {
-            TextBox flags = TextField(props.GccFlags, v => { props.GccFlags = v; QueueSave(); });
-            return Theme.Field("GCC Compiler Flags", flags, "Uses SDK defaults if empty");
+            TextBox flags = TextField(props.CCompilerFlags, v => { props.CCompilerFlags = v; QueueSave(); });
+            return Theme.Field("C Compiler Flags", flags, "Replaces the SDK's default flags for the project's C sources; the architecture's target flags are always added. Uses SDK defaults if empty");
         }
 
         private FrameworkElement Qemu()
