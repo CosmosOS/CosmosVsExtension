@@ -27,12 +27,16 @@ namespace Cosmos.VisualStudio
 
         public const string OptionsPageString = "7d7a5a5a-a875-450f-af5f-4ec35877c3b6";
 
+        // The images of Resources\CosmosImages.imagemanifest.
+        public const string ImagesString = "e59f8225-099d-4e4a-b850-d96e06ac1c69";
+
         public static readonly Guid CommandSet = new Guid(CommandSetString);
         public static readonly Guid ProjectContext = new Guid(ProjectContextString);
         public static readonly Guid DebuggingContext = new Guid(DebuggingContextString);
         public static readonly Guid BuildPane = new Guid(BuildPaneString);
         public static readonly Guid OutputPane = new Guid(OutputPaneString);
         public static readonly Guid TestsPane = new Guid(TestsPaneString);
+        public static readonly Guid Images = new Guid(ImagesString);
 
         // The MI debug engine (MIEngine) Visual Studio uses to drive gdb.
         public static readonly Guid MIEngine = new Guid("ea6637c6-17df-45b5-a183-0951c54243bc");
@@ -72,5 +76,11 @@ namespace Cosmos.VisualStudio
         public const int ThreadsToolbar = 0x1003;
         public const int GCToolbar = 0x1004;
         public const int MemoryToolbar = 0x1005;
+    }
+
+    /// <summary>Image IDs, matching the IDs of Resources\CosmosImages.imagemanifest.</summary>
+    internal static class ImageIds
+    {
+        public const int KernelProject = 1;
     }
 }

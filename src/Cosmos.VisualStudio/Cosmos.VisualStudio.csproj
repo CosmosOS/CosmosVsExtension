@@ -9,6 +9,8 @@
     <AssemblyName>Cosmos.VisualStudio</AssemblyName>
     <Version>1.2.0</Version>
     <Deterministic>true</Deterministic>
+    <!-- Compiles Resource items into the assembly, where the image manifest's pack URIs find them. -->
+    <UseWPF>true</UseWPF>
 
     <!-- VSIX packaging -->
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
@@ -56,6 +58,11 @@
     <Content Include="Resources\LICENSE.txt">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <!-- The image manifest goes into the VSIX; the images it names, into the assembly's WPF resources. -->
+    <Content Include="Resources\CosmosImages.imagemanifest">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Resource Include="Resources\Images\*.png" />
     <!-- Goes into Visual Studio's MSBuild, whose common targets import it into every project. -->
     <Content Include="BuildSystem\Cosmos.DesignTime.targets">
       <IncludeInVSIX>true</IncludeInVSIX>

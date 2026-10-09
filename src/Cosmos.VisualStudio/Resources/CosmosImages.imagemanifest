@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The extension's own images, by moniker (PackageGuids.Images and ImageIds). -->
+<ImageManifest xmlns="http://schemas.microsoft.com/VisualStudio/ImageManifestSchema/2014">
+  <Symbols>
+    <String Name="Images" Value="/Cosmos.VisualStudio;component/Resources/Images" />
+    <Guid Name="CosmosImages" Value="{e59f8225-099d-4e4a-b850-d96e06ac1c69}" />
+    <ID Name="KernelProject" Value="1" />
+  </Symbols>
+  <Images>
+    <!-- The logo already carries a light outline for dark backgrounds: keep its colors. -->
+    <Image Guid="$(CosmosImages)" ID="$(KernelProject)" AllowColorInversion="false">
+      <Source Uri="$(Images)/KernelProject16.png">
+        <Size Value="16" />
+      </Source>
+      <Source Uri="$(Images)/KernelProject20.png">
+        <Size Value="20" />
+      </Source>
+      <Source Uri="$(Images)/KernelProject24.png">
+        <Size Value="24" />
+      </Source>
+      <Source Uri="$(Images)/KernelProject32.png">
+        <Size Value="32" />
+      </Source>
+      <Source Uri="$(Images)/KernelProject48.png">
+        <Size Value="48" />
+      </Source>
+      <Source Uri="$(Images)/KernelProject64.png">
+        <Size Value="64" />
+      </Source>
+    </Image>
+  </Images>
+</ImageManifest>
