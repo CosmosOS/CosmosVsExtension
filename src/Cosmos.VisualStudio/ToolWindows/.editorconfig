@@ -1,0 +1,4 @@
+# WPF controls live on the UI thread: their constructors and event handlers
+# can't assert thread affinity one call at a time.
+[*.cs]
+dotnet_diagnostic.VSTHRD010.severity = none

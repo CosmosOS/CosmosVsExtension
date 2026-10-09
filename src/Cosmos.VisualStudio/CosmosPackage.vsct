@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+  <Include href="KnownImageIds.vsct" />
+
+  <Commands package="guidCosmosPackage">
+
+    <Menus>
+      <!-- Top-level "Cosmos" menu, next to Tools and Extensions. -->
+      <Menu guid="guidCosmosCmdSet" id="CosmosMenu" priority="0x0700" type="Menu">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
+        <Strings>
+          <ButtonText>C&amp;osmos</ButtonText>
+          <CommandName>Cosmos</CommandName>
+        </Strings>
+      </Menu>
+
+      <Menu guid="guidCosmosCmdSet" id="KernelViewsMenu" priority="0x0300" type="Menu">
+        <Parent guid="guidCosmosCmdSet" id="MenuWindowsGroup" />
+        <Strings>
+          <ButtonText>&amp;Kernel Views</ButtonText>
+          <CommandName>Kernel Views</CommandName>
+        </Strings>
+      </Menu>
+
+      <Menu guid="guidCosmosCmdSet" id="ThreadsToolbar" type="ToolWindowToolbar">
+        <CommandFlag>DefaultDocked</CommandFlag>
+        <Strings>
+          <ButtonText>Cosmos Kernel Threads</ButtonText>
+        </Strings>
+      </Menu>
+      <Menu guid="guidCosmosCmdSet" id="GCToolbar" type="ToolWindowToolbar">
+        <CommandFlag>DefaultDocked</CommandFlag>
+        <Strings>
+          <ButtonText>Cosmos Kernel GC</ButtonText>
+        </Strings>
+      </Menu>
+      <Menu guid="guidCosmosCmdSet" id="MemoryToolbar" type="ToolWindowToolbar">
+        <CommandFlag>DefaultDocked</CommandFlag>
+        <Strings>
+          <ButtonText>Cosmos Kernel Memory</ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Groups>
+      <Group guid="guidCosmosCmdSet" id="MenuNewGroup" priority="0x0100">
+        <Parent guid="guidCosmosCmdSet" id="CosmosMenu" />
+      </Group>
+      <Group guid="guidCosmosCmdSet" id="MenuKernelGroup" priority="0x0200">
+        <Parent guid="guidCosmosCmdSet" id="CosmosMenu" />
+      </Group>
+      <Group guid="guidCosmosCmdSet" id="MenuProjectGroup" priority="0x0300">
+        <Parent guid="guidCosmosCmdSet" id="CosmosMenu" />
+      </Group>
+      <Group guid="guidCosmosCmdSet" id="MenuToolsGroup" priority="0x0400">
+        <Parent guid="guidCosmosCmdSet" id="CosmosMenu" />
+      </Group>
+      <Group guid="guidCosmosCmdSet" id="MenuWindowsGroup" priority="0x0500">
+        <Parent guid="guidCosmosCmdSet" id="CosmosMenu" />
+      </Group>
+      <Group guid="guidCosmosCmdSet" id="KernelViewsGroup" priority="0x0100">
+        <Parent guid="guidCosmosCmdSet" id="KernelViewsMenu" />
+      </Group>
+
+      <!-- Solution Explorer: right-click a Cosmos kernel project. -->
+      <Group guid="guidCosmosCmdSet" id="ProjectContextGroup" priority="0x0110">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+      </Group>
+
+      <!-- Debug > Windows -->
+      <Group guid="guidCosmosCmdSet" id="DebugWindowsGroup" priority="0x0F00">
+        <Parent guid="guidVSDebugGroup" id="IDM_DEBUG_WINDOWS" />
+      </Group>
+
+      <Group guid="guidCosmosCmdSet" id="ThreadsToolbarGroup" priority="0x0100">
+        <Parent guid="guidCosmosCmdSet" id="ThreadsToolbar" />
+      </Group>
+      <Group guid="guidCosmosCmdSet" id="GCToolbarGroup" priority="0x0100">
+        <Parent guid="guidCosmosCmdSet" id="GCToolbar" />
+      </Group>
+      <Group guid="guidCosmosCmdSet" id="MemoryToolbarGroup" priority="0x0100">
+        <Parent guid="guidCosmosCmdSet" id="MemoryToolbar" />
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidCosmosCmdSet" id="cmdNewProject" priority="0x0100" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuNewGroup" />
+        <Icon guid="ImageCatalogGuid" id="AddItem" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;New Kernel Project...</ButtonText>
+          <CanonicalName>.Cosmos.NewKernelProject</CanonicalName>
+          <LocCanonicalName>.Cosmos.NewKernelProject</LocCanonicalName>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCosmosCmdSet" id="cmdBuild" priority="0x0100" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuKernelGroup" />
+        <Icon guid="ImageCatalogGuid" id="BuildSelection" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;Build Kernel</ButtonText>
+          <CanonicalName>.Cosmos.BuildKernel</CanonicalName>
+          <LocCanonicalName>.Cosmos.BuildKernel</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdRun" priority="0x0200" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuKernelGroup" />
+        <Icon guid="ImageCatalogGuid" id="RunOutline" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;Run in QEMU</ButtonText>
+          <CanonicalName>.Cosmos.RunInQemu</CanonicalName>
+          <LocCanonicalName>.Cosmos.RunInQemu</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdDebug" priority="0x0300" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuKernelGroup" />
+        <Icon guid="ImageCatalogGuid" id="Run" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;Debug in QEMU</ButtonText>
+          <CanonicalName>.Cosmos.DebugInQemu</CanonicalName>
+          <LocCanonicalName>.Cosmos.DebugInQemu</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdStop" priority="0x0400" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuKernelGroup" />
+        <Icon guid="ImageCatalogGuid" id="Stop" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <Strings>
+          <ButtonText>S&amp;top Kernel</ButtonText>
+          <CanonicalName>.Cosmos.StopKernel</CanonicalName>
+          <LocCanonicalName>.Cosmos.StopKernel</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdClean" priority="0x0500" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuKernelGroup" />
+        <Icon guid="ImageCatalogGuid" id="CleanData" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;Clean Build</ButtonText>
+          <CanonicalName>.Cosmos.CleanBuild</CanonicalName>
+          <LocCanonicalName>.Cosmos.CleanBuild</LocCanonicalName>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCosmosCmdSet" id="cmdProperties" priority="0x0100" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuProjectGroup" />
+        <Icon guid="ImageCatalogGuid" id="Property" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Kernel &amp;Properties</ButtonText>
+          <CanonicalName>.Cosmos.KernelProperties</CanonicalName>
+          <LocCanonicalName>.Cosmos.KernelProperties</LocCanonicalName>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCosmosCmdSet" id="cmdCheckTools" priority="0x0100" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuToolsGroup" />
+        <Icon guid="ImageCatalogGuid" id="Checklist" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Check &amp;Tools</ButtonText>
+          <CanonicalName>.Cosmos.CheckTools</CanonicalName>
+          <LocCanonicalName>.Cosmos.CheckTools</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdInstallTools" priority="0x0200" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuToolsGroup" />
+        <Icon guid="ImageCatalogGuid" id="Download" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;Install Tools</ButtonText>
+          <CanonicalName>.Cosmos.InstallTools</CanonicalName>
+          <LocCanonicalName>.Cosmos.InstallTools</LocCanonicalName>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCosmosCmdSet" id="cmdShowExplorer" priority="0x0100" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuWindowsGroup" />
+        <Icon guid="ImageCatalogGuid" id="VirtualMachine" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Cosmos &amp;Explorer</ButtonText>
+          <CanonicalName>.View.CosmosExplorer</CanonicalName>
+          <LocCanonicalName>.View.CosmosExplorer</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdShowTests" priority="0x0200" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MenuWindowsGroup" />
+        <Icon guid="ImageCatalogGuid" id="TestSuite" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Kernel Te&amp;sts</ButtonText>
+          <CanonicalName>.View.CosmosKernelTests</CanonicalName>
+          <LocCanonicalName>.View.CosmosKernelTests</LocCanonicalName>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCosmosCmdSet" id="cmdShowThreads" priority="0x0100" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="KernelViewsGroup" />
+        <Icon guid="ImageCatalogGuid" id="Thread" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Kernel &amp;Threads</ButtonText>
+          <CanonicalName>.Debug.CosmosKernelThreads</CanonicalName>
+          <LocCanonicalName>.Debug.CosmosKernelThreads</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdShowGC" priority="0x0200" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="KernelViewsGroup" />
+        <Icon guid="ImageCatalogGuid" id="Statistics" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Kernel &amp;GC</ButtonText>
+          <CanonicalName>.Debug.CosmosKernelGC</CanonicalName>
+          <LocCanonicalName>.Debug.CosmosKernelGC</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdShowMemory" priority="0x0300" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="KernelViewsGroup" />
+        <Icon guid="ImageCatalogGuid" id="Memory" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Kernel &amp;Memory</ButtonText>
+          <CanonicalName>.Debug.CosmosKernelMemory</CanonicalName>
+          <LocCanonicalName>.Debug.CosmosKernelMemory</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdShowMemoryMap" priority="0x0400" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="KernelViewsGroup" />
+        <Icon guid="ImageCatalogGuid" id="MemoryWindow" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Kernel Memory Ma&amp;p</ButtonText>
+          <CanonicalName>.Debug.CosmosKernelMemoryMap</CanonicalName>
+          <LocCanonicalName>.Debug.CosmosKernelMemoryMap</LocCanonicalName>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCosmosCmdSet" id="cmdThreadsRefresh" priority="0x0100" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="ThreadsToolbarGroup" />
+        <Icon guid="ImageCatalogGuid" id="Refresh" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Refresh Kernel Threads</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdThreadsCopy" priority="0x0200" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="ThreadsToolbarGroup" />
+        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Copy Kernel Threads</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdGCRefresh" priority="0x0100" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="GCToolbarGroup" />
+        <Icon guid="ImageCatalogGuid" id="Refresh" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Refresh Kernel GC</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdGCCopy" priority="0x0200" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="GCToolbarGroup" />
+        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Copy Kernel GC</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdMemoryRefresh" priority="0x0100" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MemoryToolbarGroup" />
+        <Icon guid="ImageCatalogGuid" id="Refresh" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Refresh Kernel Memory</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdMemoryCopy" priority="0x0200" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="MemoryToolbarGroup" />
+        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Copy Kernel Memory</ButtonText>
+        </Strings>
+      </Button>
+      <!-- Solution Explorer project node: shown only on Cosmos kernel projects. -->
+      <Button guid="guidCosmosCmdSet" id="cmdCtxBuild" priority="0x0100" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="ProjectContextGroup" />
+        <Icon guid="ImageCatalogGuid" id="BuildSelection" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Build Kernel</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdCtxRun" priority="0x0200" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="ProjectContextGroup" />
+        <Icon guid="ImageCatalogGuid" id="RunOutline" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Run in QEMU</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdCtxDebug" priority="0x0300" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="ProjectContextGroup" />
+        <Icon guid="ImageCatalogGuid" id="Run" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Debug in QEMU</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdCtxClean" priority="0x0400" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="ProjectContextGroup" />
+        <Icon guid="ImageCatalogGuid" id="CleanData" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Clean Kernel Build</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidCosmosCmdSet" id="cmdCtxProperties" priority="0x0500" type="Button">
+        <Parent guid="guidCosmosCmdSet" id="ProjectContextGroup" />
+        <Icon guid="ImageCatalogGuid" id="Property" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Kernel Properties</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <CommandPlacements>
+    <!-- View > Other Windows -->
+    <CommandPlacement guid="guidCosmosCmdSet" id="cmdShowExplorer" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidCosmosCmdSet" id="cmdShowTests" priority="0x0101">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
+    </CommandPlacement>
+
+    <!-- Debug > Windows -->
+    <CommandPlacement guid="guidCosmosCmdSet" id="cmdShowThreads" priority="0x0100">
+      <Parent guid="guidCosmosCmdSet" id="DebugWindowsGroup" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidCosmosCmdSet" id="cmdShowGC" priority="0x0200">
+      <Parent guid="guidCosmosCmdSet" id="DebugWindowsGroup" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidCosmosCmdSet" id="cmdShowMemory" priority="0x0300">
+      <Parent guid="guidCosmosCmdSet" id="DebugWindowsGroup" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidCosmosCmdSet" id="cmdShowMemoryMap" priority="0x0400">
+      <Parent guid="guidCosmosCmdSet" id="DebugWindowsGroup" />
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <Symbols>
+    <GuidSymbol name="guidCosmosPackage" value="{77e2f7e6-2f56-45de-9e83-82ec60bed79b}" />
+
+    <!-- The debugger's menu group GUID (VsDebugGuids.h). Declared here because
+         that header only exposes it to VSCT under _CTC_GUIDS_. -->
+    <GuidSymbol name="guidVSDebugGroup" value="{C9DD4A58-47FB-11D2-83E7-00C04F9902C1}">
+      <IDSymbol name="IDM_DEBUG_WINDOWS" value="0x0402" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidCosmosCmdSet" value="{1e5172f1-8e46-4021-83c3-bd4256282e6a}">
+      <IDSymbol name="cmdNewProject" value="0x0100" />
+      <IDSymbol name="cmdBuild" value="0x0101" />
+      <IDSymbol name="cmdRun" value="0x0102" />
+      <IDSymbol name="cmdDebug" value="0x0103" />
+      <IDSymbol name="cmdStop" value="0x0104" />
+      <IDSymbol name="cmdClean" value="0x0105" />
+      <IDSymbol name="cmdProperties" value="0x0106" />
+      <IDSymbol name="cmdCheckTools" value="0x0107" />
+      <IDSymbol name="cmdInstallTools" value="0x0108" />
+      <IDSymbol name="cmdShowExplorer" value="0x0109" />
+      <IDSymbol name="cmdShowTests" value="0x010A" />
+      <IDSymbol name="cmdShowThreads" value="0x010B" />
+      <IDSymbol name="cmdShowGC" value="0x010C" />
+      <IDSymbol name="cmdShowMemory" value="0x010D" />
+      <IDSymbol name="cmdShowMemoryMap" value="0x010E" />
+      <IDSymbol name="cmdThreadsRefresh" value="0x0110" />
+      <IDSymbol name="cmdThreadsCopy" value="0x0111" />
+      <IDSymbol name="cmdGCRefresh" value="0x0112" />
+      <IDSymbol name="cmdGCCopy" value="0x0113" />
+      <IDSymbol name="cmdMemoryRefresh" value="0x0114" />
+      <IDSymbol name="cmdMemoryCopy" value="0x0115" />
+      <IDSymbol name="cmdCtxBuild" value="0x0120" />
+      <IDSymbol name="cmdCtxRun" value="0x0121" />
+      <IDSymbol name="cmdCtxDebug" value="0x0122" />
+      <IDSymbol name="cmdCtxClean" value="0x0123" />
+      <IDSymbol name="cmdCtxProperties" value="0x0124" />
+
+      <IDSymbol name="CosmosMenu" value="0x1000" />
+      <IDSymbol name="KernelViewsMenu" value="0x1002" />
+      <IDSymbol name="ThreadsToolbar" value="0x1003" />
+      <IDSymbol name="GCToolbar" value="0x1004" />
+      <IDSymbol name="MemoryToolbar" value="0x1005" />
+
+      <IDSymbol name="MenuNewGroup" value="0x1100" />
+      <IDSymbol name="MenuKernelGroup" value="0x1101" />
+      <IDSymbol name="MenuProjectGroup" value="0x1102" />
+      <IDSymbol name="MenuToolsGroup" value="0x1103" />
+      <IDSymbol name="MenuWindowsGroup" value="0x1104" />
+      <IDSymbol name="KernelViewsGroup" value="0x1105" />
+      <IDSymbol name="ProjectContextGroup" value="0x1107" />
+      <IDSymbol name="DebugWindowsGroup" value="0x1109" />
+      <IDSymbol name="ThreadsToolbarGroup" value="0x110A" />
+      <IDSymbol name="GCToolbarGroup" value="0x110B" />
+      <IDSymbol name="MemoryToolbarGroup" value="0x110C" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>
