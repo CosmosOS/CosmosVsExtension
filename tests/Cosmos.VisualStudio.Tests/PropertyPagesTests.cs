@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using Cosmos.VisualStudio.Core;
 using Microsoft.Build.Framework.XamlTypes;
 using Newtonsoft.Json.Linq;
@@ -161,6 +162,16 @@ namespace Cosmos.VisualStudio.Tests
                 kernel.Properties.OfType<BoolProperty>().Select(p => p.Name));
             Assert.Null(kernel.Properties.Single(p => p.Name == "CosmosKernelClass").DataSource);
             Assert.Equal("ProjectFile", kernel.DataSource.Persistence);
+        }
+
+        [Fact]
+        public void DesignTimeTargetsGiveCosmosSdkProjectsTheCapability()
+        {
+            XDocument targets = XDocument.Load(Path.Combine(AppContext.BaseDirectory, "BuildSystem", "Cosmos.DesignTime.targets"));
+
+            XElement itemGroup = targets.Root.Elements("ItemGroup").Single();
+            Assert.Equal("'$(UsingCosmosSdk)' == 'true'", (string)itemGroup.Attribute("Condition"));
+            Assert.Equal(KernelPropertyPages.Capability, (string)itemGroup.Elements("ProjectCapability").Single().Attribute("Include"));
         }
     }
 }

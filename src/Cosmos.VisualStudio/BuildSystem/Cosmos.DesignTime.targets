@@ -1,0 +1,12 @@
+<Project>
+
+  <!-- Installed into Visual Studio's MSBuild, under Current\Microsoft.Common.targets\ImportAfter,
+       so every project Visual Studio loads imports it. A project that uses Cosmos.Sdk, which sets
+       UsingCosmosSdk in its props, gets the CosmosKernel capability: it brings in the Cosmos and
+       QEMU pages of Project Properties and the .cosmos/config.json storage behind them.
+       Capabilities have to come from evaluation, so this is an item, not a target. -->
+  <ItemGroup Condition="'$(UsingCosmosSdk)' == 'true'">
+    <ProjectCapability Include="CosmosKernel" />
+  </ItemGroup>
+
+</Project>

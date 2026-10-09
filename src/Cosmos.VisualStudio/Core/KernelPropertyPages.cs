@@ -15,7 +15,10 @@ namespace Cosmos.VisualStudio.Core
     /// </summary>
     public static class KernelPropertyPages
     {
-        /// <summary>The project capability of a Cosmos kernel: a project that uses Cosmos.Sdk.</summary>
+        /// <summary>
+        /// The project capability of a Cosmos kernel: a project that uses Cosmos.Sdk. Declared by
+        /// <c>BuildSystem/Cosmos.DesignTime.targets</c>, which the extension installs into Visual Studio's MSBuild.
+        /// </summary>
         public const string Capability = "CosmosKernel";
 
         /// <summary>The data source persistence of the settings stored in <c>.cosmos/config.json</c>.</summary>
@@ -70,6 +73,16 @@ namespace Cosmos.VisualStudio.Core
             AddFeature(rule, "CosmosEnableGraphics", "Graphics", "Graphics display. Without it the kernel runs headless in QEMU.", null);
             AddFeature(rule, "CosmosEnableUART", "UART / serial",
                 "Serial port output. Disabling it silences the serial console the debugger and the test runner read.", null);
+
+            var font = new StringProperty
+            {
+                Name = "CosmosDefaultFont",
+                DisplayName = "Console font",
+                Description = "Manifest resource name of a PSF font embedded in the kernel project, used by the console. Leave empty for the built-in font.",
+                Category = "Advanced"
+            };
+            SetVisibility(font, "(has-evaluated-value \"" + KernelPage + "\" \"CosmosEnableGraphics\" true)");
+            rule.Properties.Add(font);
 
             rule.Properties.Add(new StringProperty
             {

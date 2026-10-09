@@ -11,6 +11,7 @@
     <!-- The extension's Core folder has no Visual Studio dependency, so it is
          compiled straight into the tests and runs on any OS. -->
     <Compile Include="..\..\src\Cosmos.VisualStudio\Core\**\*.cs" Link="Core\%(RecursiveDir)%(Filename)%(Extension)" />
+    <None Include="..\..\src\Cosmos.VisualStudio\BuildSystem\*.targets" Link="BuildSystem\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

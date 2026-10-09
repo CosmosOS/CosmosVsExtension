@@ -56,6 +56,12 @@
     <Content Include="Resources\LICENSE.txt">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <!-- Goes into Visual Studio's MSBuild, whose common targets import it into every project. -->
+    <Content Include="BuildSystem\Cosmos.DesignTime.targets">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>Current\Microsoft.Common.targets\ImportAfter</VSIXSubPath>
+    </Content>
   </ItemGroup>
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />

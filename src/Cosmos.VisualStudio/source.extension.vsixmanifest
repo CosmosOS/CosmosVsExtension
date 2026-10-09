@@ -10,7 +10,8 @@
     <PreviewImage>Resources\CosmosIcon.png</PreviewImage>
     <Tags>cosmos, kernel, os, nativeaot, bare-metal, debugger, qemu, gdb</Tags>
   </Metadata>
-  <Installation>
+  <!-- Per machine: only then can the extension put BuildSystem\Cosmos.DesignTime.targets into Visual Studio's MSBuild. -->
+  <Installation AllUsers="true">
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.14,19.0)">
       <ProductArchitecture>amd64</ProductArchitecture>
     </InstallationTarget>
