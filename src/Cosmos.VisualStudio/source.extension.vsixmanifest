@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="Cosmos.VisualStudio.77e2f7e6-2f56-45de-9e83-82ec60bed79b" Version="1.1.0" Language="en-US" Publisher="cosmosos" />
+    <Identity Id="Cosmos.VisualStudio.77e2f7e6-2f56-45de-9e83-82ec60bed79b" Version="1.2.0" Language="en-US" Publisher="cosmosos" />
     <DisplayName>Cosmos OS Development</DisplayName>
     <Description>Create, build, run and debug Cosmos gen3 kernels — bare-metal C# compiled with NativeAOT — in QEMU, with live kernel thread, GC and memory views.</Description>
     <MoreInfo>https://github.com/CosmosOS/CosmosVsExtension</MoreInfo>
