@@ -7,7 +7,7 @@
     <LangVersion>12</LangVersion>
     <RootNamespace>Cosmos.VisualStudio</RootNamespace>
     <AssemblyName>Cosmos.VisualStudio</AssemblyName>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <Deterministic>true</Deterministic>
     <!-- Compiles Resource items into the assembly, where the image manifest's pack URIs find them. -->
     <UseWPF>true</UseWPF>
