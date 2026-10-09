@@ -163,6 +163,12 @@ namespace Cosmos.VisualStudio.Services
         public IEnumerable<string> LoadedProjectPaths()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            return LoadedProjects().Select(p => p.Path);
+        }
+
+        private IEnumerable<(IVsHierarchy Hierarchy, string Path)> LoadedProjects()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
             IVsSolution solution = Solution;
             if (solution == null)
             {
@@ -179,9 +185,33 @@ namespace Cosmos.VisualStudio.Services
                 string path = ProjectPath(batch[0]);
                 if (path != null)
                 {
-                    yield return path;
+                    yield return (batch[0], path);
                 }
             }
+        }
+
+        /// <summary>
+        /// Opens Visual Studio's Project Properties of the csproj, as the
+        /// project's Properties command does. False when the csproj isn't a
+        /// loaded project (an open folder) or has no project designer.
+        /// </summary>
+        public bool OpenProjectProperties(string csproj)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            IVsHierarchy hierarchy = LoadedProjects()
+                .FirstOrDefault(p => string.Equals(p.Path, csproj, StringComparison.OrdinalIgnoreCase)).Hierarchy;
+            if (!(hierarchy is IVsProject3 project) ||
+                hierarchy.GetGuidProperty((uint)VSConstants.VSITEMID.Root, (int)__VSHPROPID2.VSHPROPID_ProjectDesignerEditor, out Guid designer) != VSConstants.S_OK)
+            {
+                return false;
+            }
+            Guid view = VSConstants.LOGVIEWID_Primary;
+            if (project.OpenItemWithSpecific((uint)VSConstants.VSITEMID.Root, 0, ref designer, "", ref view, (IntPtr)(-1), out IVsWindowFrame frame) != VSConstants.S_OK ||
+                frame == null)
+            {
+                return false;
+            }
+            return frame.Show() == VSConstants.S_OK;
         }
 
         /// <summary>The project file of a hierarchy, or null for solution folders and the like.</summary>

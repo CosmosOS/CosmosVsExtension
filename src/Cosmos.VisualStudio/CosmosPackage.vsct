@@ -333,16 +333,6 @@
           <ButtonText>Clean Kernel Build</ButtonText>
         </Strings>
       </Button>
-      <Button guid="guidCosmosCmdSet" id="cmdCtxProperties" priority="0x0500" type="Button">
-        <Parent guid="guidCosmosCmdSet" id="ProjectContextGroup" />
-        <Icon guid="ImageCatalogGuid" id="Property" />
-        <CommandFlag>IconIsMoniker</CommandFlag>
-        <CommandFlag>DefaultInvisible</CommandFlag>
-        <CommandFlag>DynamicVisibility</CommandFlag>
-        <Strings>
-          <ButtonText>Kernel Properties</ButtonText>
-        </Strings>
-      </Button>
     </Buttons>
   </Commands>
 
@@ -405,7 +395,6 @@
       <IDSymbol name="cmdCtxRun" value="0x0121" />
       <IDSymbol name="cmdCtxDebug" value="0x0122" />
       <IDSymbol name="cmdCtxClean" value="0x0123" />
-      <IDSymbol name="cmdCtxProperties" value="0x0124" />
 
       <IDSymbol name="CosmosMenu" value="0x1000" />
       <IDSymbol name="KernelViewsMenu" value="0x1002" />

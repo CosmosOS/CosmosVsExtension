@@ -74,7 +74,8 @@ namespace Cosmos.VisualStudio.Core
         public bool EnableStorage { get; set; } = true;
         public bool EnableFat { get; set; } = true;
         public bool EnableAudio { get; set; } = true;
-        public string GccFlags { get; set; } = "";
+        // CCCompilerFlags: replaces the SDK's default C flags; the target flags are always added.
+        public string CCompilerFlags { get; set; } = "";
         public List<PackageInfo> Packages { get; set; } = new List<PackageInfo>();
         public QemuConfig Qemu { get; set; } = new QemuConfig();
     }
@@ -246,14 +247,17 @@ namespace Cosmos.VisualStudio.Core
                 ["mouse"] = q.Mouse,
                 ["audio"] = q.Audio,
                 ["extraArgs"] = q.ExtraArgs,
-                ["disks"] = new JArray(q.Disks.Select(d => new JObject
-                {
-                    ["path"] = d.Path,
-                    ["type"] = d.Type,
-                    ["size"] = d.Size
-                }).Cast<object>().ToArray())
+                ["disks"] = DisksToJson(q.Disks)
             };
         }
+
+        public static JArray DisksToJson(IEnumerable<DiskConfig> disks) =>
+            new JArray(disks.Select(d => new JObject
+            {
+                ["path"] = d.Path,
+                ["type"] = d.Type,
+                ["size"] = d.Size
+            }).Cast<object>().ToArray());
 
         public static QemuConfig LoadQemuConfig(string projectDir, string arch)
         {
@@ -384,7 +388,7 @@ namespace Cosmos.VisualStudio.Core
                 EnableStorage = Enabled("CosmosEnableStorage"),
                 EnableFat = Enabled("CosmosEnableFat"),
                 EnableAudio = Enabled("CosmosEnableAudio"),
-                GccFlags = GetProperty(content, "GCCCompilerFlags"),
+                CCompilerFlags = GetProperty(content, "CCCompilerFlags"),
                 Packages = packages,
                 Qemu = LoadQemuConfig(projectDir, targetArch)
             };
@@ -412,9 +416,9 @@ namespace Cosmos.VisualStudio.Core
                 content = SetProperty(content, "CosmosKernelClass", props.KernelClass);
             }
 
-            content = string.IsNullOrEmpty(props.GccFlags)
-                ? RemoveProperty(content, "GCCCompilerFlags")
-                : SetProperty(content, "GCCCompilerFlags", props.GccFlags);
+            content = string.IsNullOrEmpty(props.CCompilerFlags)
+                ? RemoveProperty(content, "CCCompilerFlags")
+                : SetProperty(content, "CCCompilerFlags", props.CCompilerFlags);
 
             // On is the SDK default, so only an off switch is written.
             content = SetFeature(content, "CosmosEnableInterrupts", props.EnableInterrupts);
