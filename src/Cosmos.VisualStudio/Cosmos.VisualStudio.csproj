@@ -63,4 +63,14 @@
   <!-- SDK-style projects don't pull the VSSDK targets in on their own. -->
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != '' And Exists('$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets')" />
 
+  <!-- CreatePkgDef loads the assembly and all its types, so it needs Microsoft.Build.Framework,
+       whose Rule types the Project Properties pages are made of. It looks for dependencies only
+       among the references, where NuGet gives a reference assembly, which can't be loaded:
+       hand it the one of the MSBuild doing the build. -->
+  <Target Name="AddMSBuildFrameworkForPkgDef" BeforeTargets="GeneratePkgDef">
+    <ItemGroup>
+      <CreatePkgDefReferencedAssemblies Include="$(MSBuildToolsPath)\Microsoft.Build.Framework.dll" />
+    </ItemGroup>
+  </Target>
+
 </Project>
