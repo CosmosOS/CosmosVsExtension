@@ -35,7 +35,6 @@ namespace Cosmos.VisualStudio
             AddKernel(commands, package, PackageIds.CtxRun, contextual: true, p => package.Launcher.RunAsync(package.TargetFor(p)));
             AddKernel(commands, package, PackageIds.CtxDebug, contextual: true, p => package.Launcher.DebugAsync(package.TargetFor(p)));
             AddKernel(commands, package, PackageIds.CtxClean, contextual: true, p => { package.Builder.Clean(p); return Task.CompletedTask; });
-            AddKernel(commands, package, PackageIds.CtxProperties, contextual: true, p => ShowPropertiesAsync(package, p));
 
             OleMenuCommand stop = Add(commands, PackageIds.Stop, () =>
             {
@@ -118,8 +117,19 @@ namespace Cosmos.VisualStudio
             };
         }
 
+        /// <summary>
+        /// A kernel loaded as a project edits its properties in Visual Studio's
+        /// Project Properties, where the Cosmos and QEMU pages are (the
+        /// project's own Properties command opens the same). An open folder has
+        /// no project system behind it, so there the Cosmos window stands in.
+        /// </summary>
         private static async Task ShowPropertiesAsync(CosmosPackage package, ProjectInfo project)
         {
+            await package.JoinableTaskFactory.SwitchToMainThreadAsync();
+            if (package.Workspace.OpenProjectProperties(project.Csproj))
+            {
+                return;
+            }
             KernelPropertiesWindow window = await package.ShowToolWindowAsync<KernelPropertiesWindow>();
             await package.JoinableTaskFactory.SwitchToMainThreadAsync();
             window.Load(project);

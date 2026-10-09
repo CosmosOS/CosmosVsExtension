@@ -11,7 +11,7 @@ Available from the **Cosmos** menu (under Extensions), the **Cosmos OS** tool wi
 - Run it in QEMU through `cosmos run`, the serial console streaming into the Output window
 - Debug with GDB through Visual Studio's debugger
 - Live kernel diagnostics while debugging: threads, GC, memory and a page map
-- Edit project properties: kernel features, QEMU machine, devices (network card, keyboard, mouse, audio), disks and port forwards
+- Edit project properties in Visual Studio's own Project Properties: **Cosmos** and **QEMU** pages for the target architecture, kernel features, QEMU machine, devices (network card, keyboard, mouse, audio), disks and port forwards
 - Run the Cosmos kernel test suites (in the Cosmos repository)
 - Check and install the toolchain (.NET 10 SDK, Cosmos CLI, QEMU, GDB)
 - Clean build outputs
@@ -45,9 +45,20 @@ When the startup project is a Cosmos kernel, **Start Debugging** (F5) boots it i
 - While debugging, **Cosmos Kernel Threads**, **Cosmos Kernel GC**, **Cosmos Kernel Memory** and **Cosmos Kernel Memory Map** open next to the Output window (also under **Debug > Windows**). They are read over QEMU's QMP socket without pausing the guest.
 - The NativeAOT pretty-printers render strings and arrays when GDB has Python.
 
-**Stop Debugging** ends QEMU and GDB together. QEMU's devices, memory and disks come from **Kernel Properties**.
+**Stop Debugging** ends QEMU and GDB together. QEMU's devices, memory and disks come from the project's properties.
 
 Settings live under **Tools > Options > Cosmos OS**: default architecture for new projects, whether F5 / Ctrl+F5 are handled, build before running, and the test mode.
+
+## Project properties
+
+**Properties** on a kernel project (or **Cosmos > Kernel Properties**) opens Visual Studio's Project Properties, with two pages ahead of the standard ones:
+
+- **Cosmos**: target architecture, kernel entry class, kernel features (`CosmosEnable*`) and C compiler flags. Features that depend on a disabled one are hidden, as the SDK turns them off too.
+- **QEMU**: memory, machine type, CPU, serial output, network card, port forwards, keyboard, mouse, audio, disks and extra arguments. Only devices with a kernel driver for the target architecture are listed.
+
+Kernel features and flags are written to the `.csproj`; the architecture and QEMU settings to `.cosmos/config.json`, shared with the VS Code extension. Disks are one per line: the image path, then `nvme` for an NVMe controller and the size to create a missing image with (`data.img nvme 1G`).
+
+A kernel opened as a folder has no Project Properties; there **Kernel Properties** opens the Cosmos properties window instead.
 
 ## Testing
 
