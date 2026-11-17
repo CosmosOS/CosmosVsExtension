@@ -9,7 +9,7 @@ namespace Cosmos.VisualStudio.Core
     /// The Cosmos and QEMU pages of Visual Studio's Project Properties, as the
     /// <see cref="Rule"/> objects the project system builds its UI from (see
     /// https://github.com/dotnet/project-system/tree/main/docs/repo/property-pages).
-    /// Kernel switches are MSBuild properties of the csproj; the architecture
+    /// Kernel switches are MSBuild properties of the project file; the architecture
     /// and the QEMU settings live in <c>.cosmos/config.json</c> and go through
     /// the <see cref="ConfigPersistence"/> property provider.
     /// </summary>

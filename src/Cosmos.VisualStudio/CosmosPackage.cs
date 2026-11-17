@@ -109,7 +109,7 @@ namespace Cosmos.VisualStudio
         internal KernelTarget TargetFor(ProjectInfo project)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            return new KernelTarget(project.Csproj, project.Arch, Workspace.Roots);
+            return new KernelTarget(project.ProjectFile, project.Arch, Workspace.Roots);
         }
 
         internal void ShowMessage(string message, OLEMSGICON icon)

@@ -23,7 +23,7 @@ namespace Cosmos.VisualStudio
 
             // Cosmos menu: act on the startup kernel (or the first kernel found).
             AddKernel(commands, package, PackageIds.Build, contextual: false,
-                p => package.Builder.BuildAsync(p.Csproj, p.Arch, KernelBuilder.ActiveConfiguration()));
+                p => package.Builder.BuildAsync(p.ProjectFile, p.Arch, KernelBuilder.ActiveConfiguration()));
             AddKernel(commands, package, PackageIds.Run, contextual: false, p => package.Launcher.RunAsync(package.TargetFor(p)));
             AddKernel(commands, package, PackageIds.Debug, contextual: false, p => package.Launcher.DebugAsync(package.TargetFor(p)));
             AddKernel(commands, package, PackageIds.Clean, contextual: false, p => { package.Builder.Clean(p); return Task.CompletedTask; });
@@ -31,7 +31,7 @@ namespace Cosmos.VisualStudio
 
             // Solution Explorer: act on the right-clicked kernel project.
             AddKernel(commands, package, PackageIds.CtxBuild, contextual: true,
-                p => package.Builder.BuildAsync(p.Csproj, p.Arch, KernelBuilder.ActiveConfiguration()));
+                p => package.Builder.BuildAsync(p.ProjectFile, p.Arch, KernelBuilder.ActiveConfiguration()));
             AddKernel(commands, package, PackageIds.CtxRun, contextual: true, p => package.Launcher.RunAsync(package.TargetFor(p)));
             AddKernel(commands, package, PackageIds.CtxDebug, contextual: true, p => package.Launcher.DebugAsync(package.TargetFor(p)));
             AddKernel(commands, package, PackageIds.CtxClean, contextual: true, p => { package.Builder.Clean(p); return Task.CompletedTask; });
@@ -126,7 +126,7 @@ namespace Cosmos.VisualStudio
         private static async Task ShowPropertiesAsync(CosmosPackage package, ProjectInfo project)
         {
             await package.JoinableTaskFactory.SwitchToMainThreadAsync();
-            if (package.Workspace.OpenProjectProperties(project.Csproj))
+            if (package.Workspace.OpenProjectProperties(project.ProjectFile))
             {
                 return;
             }

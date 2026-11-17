@@ -69,6 +69,31 @@ namespace Cosmos.VisualStudio.Tests
             Assert.Equal("MSB1009", bare.Code);
         }
 
+        [Fact]
+        public void ParsesVisualBasicDiagnostics()
+        {
+            BuildDiagnostic d = BuildDiagnostic.TryParse(
+                @"C:\src\VbKernel\Kernel.vb(4,27): error BC30451: 'Foo' is not declared. It may be inaccessible due to its protection level. [C:\src\VbKernel\VbKernel.vbproj]");
+
+            Assert.NotNull(d);
+            Assert.True(d.IsError);
+            Assert.Equal(@"C:\src\VbKernel\Kernel.vb", d.File);
+            Assert.Equal(4, d.Line);
+            Assert.Equal(27, d.Column);
+            Assert.Equal("BC30451", d.Code);
+            Assert.Equal("'Foo' is not declared. It may be inaccessible due to its protection level.", d.Message);
+            Assert.Equal(@"C:\src\VbKernel\VbKernel.vbproj", d.Project);
+
+            BuildDiagnostic w = BuildDiagnostic.TryParse(@"C:\src\VbKernel\Kernel.vb(3,13): warning BC42024: Unused local variable: 'unused'. [C:\src\VbKernel\VbKernel.vbproj]");
+            Assert.False(w.IsError);
+            Assert.Equal("Unused local variable: 'unused'.", w.Message);
+
+            BuildDiagnostic bare = BuildDiagnostic.TryParse("vbc : error BC31030: Conditional compilation constant '; ^^ ^^ ARCH_X64' is not valid: Identifier expected.");
+            Assert.NotNull(bare);
+            Assert.Null(bare.File);
+            Assert.Equal("BC31030", bare.Code);
+        }
+
         [Theory]
         [InlineData("")]
         [InlineData("Build succeeded.")]

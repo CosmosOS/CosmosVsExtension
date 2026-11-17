@@ -126,7 +126,7 @@ namespace Cosmos.VisualStudio.ToolWindows
         {
             var welcome = new StackPanel { Margin = new Thickness(0, 10, 0, 0) };
             welcome.Children.Add(Theme.Text("Welcome to Cosmos OS Development!", bold: true, size: 14));
-            TextBlock line = Theme.Text("Create your first bare-metal C# kernel.", gray: true);
+            TextBlock line = Theme.Text("Create your first bare-metal kernel, in C# or Visual Basic.", gray: true);
             line.Margin = new Thickness(0, 6, 0, 10);
             welcome.Children.Add(line);
             Button create = Theme.Button("Create Kernel Project", () => Invoke(PackageIds.NewProject), KnownMonikers.AddItem);
@@ -150,7 +150,7 @@ namespace Cosmos.VisualStudio.ToolWindows
 
             var title = new StackPanel { Margin = new Thickness(6, 2, 0, 6) };
             title.Children.Add(Theme.Text(project.Name, bold: true, wrap: false));
-            title.Children.Add(Theme.Text($"{ProjectInfo.ArchDescription(project.Arch)} · {project.Csproj}", gray: true, size: 11, wrap: false));
+            title.Children.Add(Theme.Text($"{ProjectInfo.ArchDescription(project.Arch)} · {project.ProjectFile}", gray: true, size: 11, wrap: false));
             body.Children.Add(title);
 
             bool busy = package.Builder.IsBuilding;

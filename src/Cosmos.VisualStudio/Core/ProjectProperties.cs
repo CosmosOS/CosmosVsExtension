@@ -205,7 +205,7 @@ namespace Cosmos.VisualStudio.Core
             choices.Any(c => c.Enabled && c.Value == value);
     }
 
-    /// <summary>Reads and writes the kernel csproj properties and <c>.cosmos/config.json</c>.</summary>
+    /// <summary>Reads and writes the kernel project file's properties and <c>.cosmos/config.json</c>.</summary>
     public static class ProjectConfig
     {
         public static QemuConfig DefaultQemuConfig(string arch)
@@ -349,11 +349,11 @@ namespace Cosmos.VisualStudio.Core
             });
         }
 
-        public static ProjectProperties Parse(string csproj)
+        public static ProjectProperties Parse(string projectFile)
         {
-            string content = File.ReadAllText(csproj);
-            string name = Path.GetFileNameWithoutExtension(csproj);
-            string projectDir = Path.GetDirectoryName(csproj);
+            string content = File.ReadAllText(projectFile);
+            string name = Path.GetFileNameWithoutExtension(projectFile);
+            string projectDir = Path.GetDirectoryName(projectFile);
             string targetArch = CosmosProject.ReadTargetArch(projectDir);
 
             var packages = new List<PackageInfo>();
@@ -366,7 +366,7 @@ namespace Cosmos.VisualStudio.Core
                 }
             }
 
-            // Features are on unless the csproj turns them off explicitly.
+            // Features are on unless the project file turns them off explicitly.
             bool Enabled(string prop) => GetProperty(content, prop) != "false";
 
             string kernelClass = GetProperty(content, "CosmosKernelClass");
@@ -402,13 +402,13 @@ namespace Cosmos.VisualStudio.Core
             return m.Success ? UnescapeXml(m.Groups[1].Value) : "";
         }
 
-        public static void Save(string csproj, ProjectProperties props)
+        public static void Save(string projectFile, ProjectProperties props)
         {
-            string content = File.ReadAllText(csproj);
+            string content = File.ReadAllText(projectFile);
 
             content = SetProperty(content, "TargetFramework", NonEmpty(props.TargetFramework, "net10.0"));
 
-            CosmosProject.UpdateConfig(Path.GetDirectoryName(csproj), config =>
+            CosmosProject.UpdateConfig(Path.GetDirectoryName(projectFile), config =>
                 config["targetArch"] = NonEmpty(props.TargetArch, "x64"));
 
             if (!string.IsNullOrEmpty(props.KernelClass))
@@ -434,7 +434,7 @@ namespace Cosmos.VisualStudio.Core
             content = SetFeature(content, "CosmosEnableFat", props.EnableFat);
             content = SetFeature(content, "CosmosEnableAudio", props.EnableAudio);
 
-            File.WriteAllText(csproj, content);
+            File.WriteAllText(projectFile, content);
         }
 
         private static string SetFeature(string content, string prop, bool enabled) =>

@@ -6,7 +6,7 @@ Visual Studio extension for [Cosmos gen3](https://github.com/valentinbreiz/nativ
 
 Available from the **Cosmos** menu (under Extensions), the **Cosmos OS** tool window, the project's context menu in Solution Explorer, and F5 / Ctrl+F5:
 
-- New kernel project from the `cosmos-kernel` template, in a new solution or added to the open one
+- New kernel project in C# or Visual Basic, from the `cosmos-kernel-csharp` and `cosmos-kernel-vb` templates, in a new solution or added to the open one
 - Build the kernel through `cosmos build`, with errors and warnings in the Error List
 - Run it in QEMU through `cosmos run`, the serial console streaming into the Output window
 - Debug with GDB through Visual Studio's debugger
@@ -56,7 +56,7 @@ Settings live under **Tools > Options > Cosmos OS**: default architecture for ne
 - **Cosmos**: target architecture, kernel entry class, kernel features (`CosmosEnable*`), console font and C compiler flags. Features that depend on a disabled one are hidden, as the SDK turns them off too.
 - **QEMU**: memory, machine type, CPU, serial output, network card, port forwards, keyboard, mouse, audio, disks and extra arguments. Only devices with a kernel driver for the target architecture are listed.
 
-Kernel features and flags are written to the `.csproj`; the architecture and QEMU settings to `.cosmos/config.json`, shared with the VS Code extension. Disks are one per line: the image path, then `nvme` for an NVMe controller and the size to create a missing image with (`data.img nvme 1G`).
+Kernel features and flags are written to the project file (`.csproj` or `.vbproj`); the architecture and QEMU settings to `.cosmos/config.json`, shared with the VS Code extension. Disks are one per line: the image path, then `nvme` for an NVMe controller and the size to create a missing image with (`data.img nvme 1G`).
 
 A kernel opened as a folder has no Project Properties; there **Kernel Properties** opens the Cosmos properties window instead.
 

@@ -57,11 +57,11 @@ namespace Cosmos.VisualStudio.Services
         }
 
         /// <summary>Builds the kernel; true when <c>cosmos build</c> succeeded.</summary>
-        public async Task<bool> BuildAsync(string csproj, string arch, string configuration)
+        public async Task<bool> BuildAsync(string projectFile, string arch, string configuration)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            string name = Path.GetFileNameWithoutExtension(csproj);
-            string projectDir = Path.GetDirectoryName(csproj);
+            string name = Path.GetFileNameWithoutExtension(projectFile);
+            string projectDir = Path.GetDirectoryName(projectFile);
 
             if (IsBuilding)
             {

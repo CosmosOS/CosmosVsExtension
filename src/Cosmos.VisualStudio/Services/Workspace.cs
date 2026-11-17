@@ -17,7 +17,7 @@ namespace Cosmos.VisualStudio.Services
     /// </summary>
     internal sealed class Workspace
     {
-        private readonly ConcurrentDictionary<string, (DateTime Stamp, bool IsCosmos)> csprojCache =
+        private readonly ConcurrentDictionary<string, (DateTime Stamp, bool IsCosmos)> projectCache =
             new ConcurrentDictionary<string, (DateTime, bool)>(StringComparer.OrdinalIgnoreCase);
 
         public Workspace()
@@ -73,7 +73,7 @@ namespace Cosmos.VisualStudio.Services
         }
 
         private static bool SameProject(ProjectInfo a, ProjectInfo b) =>
-            a == null ? b == null : b != null && string.Equals(a.Csproj, b.Csproj, StringComparison.OrdinalIgnoreCase) && a.Arch == b.Arch;
+            a == null ? b == null : b != null && string.Equals(a.ProjectFile, b.ProjectFile, StringComparison.OrdinalIgnoreCase) && a.Arch == b.Arch;
 
         /// <summary>Re-resolves the kernel project now and updates the Cosmos UI context.</summary>
         public void Refresh()
@@ -191,15 +191,15 @@ namespace Cosmos.VisualStudio.Services
         }
 
         /// <summary>
-        /// Opens Visual Studio's Project Properties of the csproj, as the
-        /// project's Properties command does. False when the csproj isn't a
-        /// loaded project (an open folder) or has no project designer.
+        /// Opens Visual Studio's Project Properties of the project file, as the
+        /// project's Properties command does. False when it isn't a loaded
+        /// project (an open folder) or has no project designer.
         /// </summary>
-        public bool OpenProjectProperties(string csproj)
+        public bool OpenProjectProperties(string projectFile)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             IVsHierarchy hierarchy = LoadedProjects()
-                .FirstOrDefault(p => string.Equals(p.Path, csproj, StringComparison.OrdinalIgnoreCase)).Hierarchy;
+                .FirstOrDefault(p => string.Equals(p.Path, projectFile, StringComparison.OrdinalIgnoreCase)).Hierarchy;
             if (!(hierarchy is IVsProject3 project) ||
                 hierarchy.GetGuidProperty((uint)VSConstants.VSITEMID.Root, (int)__VSHPROPID2.VSHPROPID_ProjectDesignerEditor, out Guid designer) != VSConstants.S_OK)
             {
@@ -214,13 +214,13 @@ namespace Cosmos.VisualStudio.Services
             return frame.Show() == VSConstants.S_OK;
         }
 
-        /// <summary>The project file of a hierarchy, or null for solution folders and the like.</summary>
+        /// <summary>The C# or Visual Basic project file of a hierarchy, or null for solution folders and the like.</summary>
         public static string ProjectPath(IVsHierarchy hierarchy)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             if (hierarchy is IVsProject project &&
                 project.GetMkDocument((uint)VSConstants.VSITEMID.Root, out string path) == VSConstants.S_OK &&
-                !string.IsNullOrEmpty(path) && path.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase) && File.Exists(path))
+                !string.IsNullOrEmpty(path) && CosmosProject.IsProjectFile(path) && File.Exists(path))
             {
                 return path;
             }
@@ -271,28 +271,28 @@ namespace Cosmos.VisualStudio.Services
             }
         }
 
-        /// <summary>True when the csproj is a Cosmos kernel; cached until the file changes.</summary>
-        public bool IsCosmosProject(string csproj)
+        /// <summary>True when the project file is a Cosmos kernel; cached until the file changes.</summary>
+        public bool IsCosmosProject(string projectFile)
         {
-            if (string.IsNullOrEmpty(csproj))
+            if (string.IsNullOrEmpty(projectFile))
             {
                 return false;
             }
             DateTime stamp;
             try
             {
-                stamp = File.GetLastWriteTimeUtc(csproj);
+                stamp = File.GetLastWriteTimeUtc(projectFile);
             }
             catch (Exception e) when (e is IOException || e is UnauthorizedAccessException || e is ArgumentException)
             {
                 return false;
             }
-            if (csprojCache.TryGetValue(csproj, out var cached) && cached.Stamp == stamp)
+            if (projectCache.TryGetValue(projectFile, out var cached) && cached.Stamp == stamp)
             {
                 return cached.IsCosmos;
             }
-            bool isCosmos = CosmosProject.IsCosmosCsproj(csproj);
-            csprojCache[csproj] = (stamp, isCosmos);
+            bool isCosmos = CosmosProject.IsCosmosProject(projectFile);
+            projectCache[projectFile] = (stamp, isCosmos);
             return isCosmos;
         }
 
@@ -342,8 +342,8 @@ namespace Cosmos.VisualStudio.Services
             }
             if (IsOpenFolder && SolutionDirectory is string root)
             {
-                string csproj = Directory.GetFiles(root, "*.csproj").FirstOrDefault(IsCosmosProject);
-                return csproj == null ? null : CosmosProject.Load(csproj);
+                string projectFile = CosmosProject.ProjectFilesIn(root).FirstOrDefault(IsCosmosProject);
+                return projectFile == null ? null : CosmosProject.Load(projectFile);
             }
             return null;
         }

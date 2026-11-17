@@ -74,11 +74,11 @@ namespace Cosmos.VisualStudio.ToolWindows
             project = info;
             try
             {
-                props = ProjectConfig.Parse(info.Csproj);
+                props = ProjectConfig.Parse(info.ProjectFile);
             }
             catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
             {
-                Content = Theme.Text("Could not read " + info.Csproj + ": " + e.Message, gray: true);
+                Content = Theme.Text("Could not read " + info.ProjectFile + ": " + e.Message, gray: true);
                 return;
             }
             Render();
@@ -126,7 +126,7 @@ namespace Cosmos.VisualStudio.ToolWindows
                 Visibility = Visibility.Hidden
             };
             actions.Children.Add(savedText);
-            actions.Children.Add(Theme.Button("Edit .csproj", OpenCsproj));
+            actions.Children.Add(Theme.Button("Edit " + Path.GetFileName(project.ProjectFile), OpenProjectFile));
             Grid.SetColumn(actions, 1);
             grid.Children.Add(actions);
             return grid;
@@ -470,7 +470,7 @@ namespace Cosmos.VisualStudio.ToolWindows
             saveTimer.Stop();
             try
             {
-                ProjectConfig.Save(project.Csproj, props);
+                ProjectConfig.Save(project.ProjectFile, props);
                 ShowSaved();
                 CosmosPackage.Instance?.Workspace.Refresh();
             }
@@ -502,10 +502,10 @@ namespace Cosmos.VisualStudio.ToolWindows
             savedTimer.Start();
         }
 
-        private void OpenCsproj()
+        private void OpenProjectFile()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            VsShellUtilities.OpenDocument(CosmosPackage.Instance, project.Csproj);
+            VsShellUtilities.OpenDocument(CosmosPackage.Instance, project.ProjectFile);
         }
     }
 }
