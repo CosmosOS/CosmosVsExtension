@@ -150,7 +150,7 @@ namespace Cosmos.VisualStudio.ToolWindows
 
             var title = new StackPanel { Margin = new Thickness(6, 2, 0, 6) };
             title.Children.Add(Theme.Text(project.Name, bold: true, wrap: false));
-            title.Children.Add(Theme.Text($"{ProjectInfo.ArchDescription(project.Arch)} · {project.Csproj}", gray: true, size: 11, wrap: false));
+            title.Children.Add(Theme.Text($"{ProjectInfo.ArchDescription(project.Arch)} · {project.ProjectFile}", gray: true, size: 11, wrap: false));
             body.Children.Add(title);
 
             bool busy = package.Builder.IsBuilding;

@@ -121,6 +121,20 @@ namespace Cosmos.VisualStudio.Tests
         }
 
         [Fact]
+        public void BuildIsOutOfDateWhenVisualBasicSourcesAreNewer()
+        {
+            using var dir = new TempDir();
+            string source = dir.Write("Kernel.vb", "Class K\nEnd Class");
+            string iso = dir.Write("output-x64/VbKernel.iso", "iso");
+            File.SetLastWriteTimeUtc(source, DateTime.UtcNow.AddMinutes(-10));
+            File.SetLastWriteTimeUtc(iso, DateTime.UtcNow.AddMinutes(-5));
+            Assert.False(KernelArtifacts.IsBuildOutOfDate(dir.Path, "x64"));
+
+            File.SetLastWriteTimeUtc(source, DateTime.UtcNow);
+            Assert.True(KernelArtifacts.IsBuildOutOfDate(dir.Path, "x64"));
+        }
+
+        [Fact]
         public void LaunchRequiresABuild()
         {
             using var dir = new TempDir();

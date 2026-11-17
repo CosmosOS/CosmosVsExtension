@@ -11,19 +11,19 @@ namespace Cosmos.VisualStudio.Core
     /// </summary>
     public sealed class KernelTarget
     {
-        public KernelTarget(string csproj, string arch, IReadOnlyList<string> rootDirs)
+        public KernelTarget(string projectFile, string arch, IReadOnlyList<string> rootDirs)
         {
-            Csproj = csproj;
+            ProjectFile = projectFile;
             Arch = arch;
             RootDirs = rootDirs ?? Array.Empty<string>();
         }
 
-        public string Csproj { get; }
+        public string ProjectFile { get; }
         public string Arch { get; }
         // Workspace roots that may hold the artifacts/ directory Cosmos.Sdk writes to.
         public IReadOnlyList<string> RootDirs { get; }
-        public string Name => Path.GetFileNameWithoutExtension(Csproj);
-        public string ProjectDir => Path.GetDirectoryName(Csproj);
+        public string Name => Path.GetFileNameWithoutExtension(ProjectFile);
+        public string ProjectDir => Path.GetDirectoryName(ProjectFile);
     }
 
     /// <summary>Everything needed to start <c>cosmos run</c> for one kernel.</summary>
@@ -70,7 +70,7 @@ namespace Cosmos.VisualStudio.Core
 
             try
             {
-                spec.Properties = ProjectConfig.Parse(target.Csproj);
+                spec.Properties = ProjectConfig.Parse(target.ProjectFile);
             }
             catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
             {

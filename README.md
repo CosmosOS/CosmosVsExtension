@@ -56,7 +56,7 @@ Settings live under **Tools > Options > Cosmos OS**: default architecture for ne
 - **Cosmos**: target architecture, kernel entry class, kernel features (`CosmosEnable*`), console font and C compiler flags. Features that depend on a disabled one are hidden, as the SDK turns them off too.
 - **QEMU**: memory, machine type, CPU, serial output, network card, port forwards, keyboard, mouse, audio, disks and extra arguments. Only devices with a kernel driver for the target architecture are listed.
 
-Kernel features and flags are written to the `.csproj`; the architecture and QEMU settings to `.cosmos/config.json`, shared with the VS Code extension. Disks are one per line: the image path, then `nvme` for an NVMe controller and the size to create a missing image with (`data.img nvme 1G`).
+Kernel features and flags are written to the project file (`.csproj` or `.vbproj`); the architecture and QEMU settings to `.cosmos/config.json`, shared with the VS Code extension. Disks are one per line: the image path, then `nvme` for an NVMe controller and the size to create a missing image with (`data.img nvme 1G`).
 
 A kernel opened as a folder has no Project Properties; there **Kernel Properties** opens the Cosmos properties window instead.
 

@@ -6,19 +6,19 @@ using Newtonsoft.Json.Linq;
 
 namespace Cosmos.VisualStudio.Core
 {
-    /// <summary>A Cosmos kernel project: the csproj plus its configured architecture.</summary>
+    /// <summary>A Cosmos kernel project: the project file plus its configured architecture.</summary>
     public sealed class ProjectInfo
     {
-        public ProjectInfo(string csproj, string arch)
+        public ProjectInfo(string projectFile, string arch)
         {
-            Csproj = csproj;
+            ProjectFile = projectFile;
             Arch = arch;
         }
 
-        public string Csproj { get; }
+        public string ProjectFile { get; }
         public string Arch { get; }
-        public string Name => Path.GetFileNameWithoutExtension(Csproj);
-        public string ProjectDir => Path.GetDirectoryName(Csproj);
+        public string Name => Path.GetFileNameWithoutExtension(ProjectFile);
+        public string ProjectDir => Path.GetDirectoryName(ProjectFile);
 
         public static string ArchLabel(string arch) => arch == "arm64" ? "ARM64" : "x64";
 
@@ -30,7 +30,17 @@ namespace Cosmos.VisualStudio.Core
     {
         public const int MaxSearchDepth = 3;
 
-        public static List<string> FindCsprojFiles(string dir, int depth = 0)
+        /// <summary>The project files a kernel can have, in the order <c>cosmos build</c> searches a directory: C#, then Visual Basic.</summary>
+        public static readonly IReadOnlyList<string> ProjectExtensions = new[] { ".csproj", ".vbproj" };
+
+        public static bool IsProjectFile(string path) =>
+            ProjectExtensions.Contains(Path.GetExtension(path), StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>The project files directly in <paramref name="dir"/>: the C# ones in name order, then the Visual Basic ones.</summary>
+        public static IEnumerable<string> ProjectFilesIn(string dir) =>
+            ProjectExtensions.SelectMany(extension => Directory.GetFiles(dir, "*" + extension).OrderBy(f => f, StringComparer.OrdinalIgnoreCase));
+
+        public static List<string> FindProjectFiles(string dir, int depth = 0)
         {
             var results = new List<string>();
             if (depth > MaxSearchDepth || string.IsNullOrEmpty(dir))
@@ -39,10 +49,7 @@ namespace Cosmos.VisualStudio.Core
             }
             try
             {
-                foreach (string file in Directory.GetFiles(dir, "*.csproj").OrderBy(f => f, StringComparer.OrdinalIgnoreCase))
-                {
-                    results.Add(file);
-                }
+                results.AddRange(ProjectFilesIn(dir));
                 foreach (string sub in Directory.GetDirectories(dir).OrderBy(d => d, StringComparer.OrdinalIgnoreCase))
                 {
                     string name = Path.GetFileName(sub);
@@ -51,7 +58,7 @@ namespace Cosmos.VisualStudio.Core
                     {
                         continue;
                     }
-                    results.AddRange(FindCsprojFiles(sub, depth + 1));
+                    results.AddRange(FindProjectFiles(sub, depth + 1));
                 }
             }
             catch (UnauthorizedAccessException)
@@ -63,12 +70,12 @@ namespace Cosmos.VisualStudio.Core
             return results;
         }
 
-        /// <summary>True when the csproj references the Cosmos SDK or kernel packages.</summary>
-        public static bool IsCosmosCsproj(string csproj)
+        /// <summary>True when the project file references the Cosmos SDK or kernel packages.</summary>
+        public static bool IsCosmosProject(string projectFile)
         {
             try
             {
-                string content = File.ReadAllText(csproj);
+                string content = File.ReadAllText(projectFile);
                 return content.Contains("Cosmos.Sdk") || content.Contains("Cosmos.Kernel");
             }
             catch (IOException)
@@ -83,28 +90,28 @@ namespace Cosmos.VisualStudio.Core
 
         /// <summary>
         /// The kernel project to act on: <paramref name="preferred"/> when it is a
-        /// Cosmos project, otherwise the first Cosmos csproj under the roots.
+        /// Cosmos project, otherwise the first Cosmos project file under the roots.
         /// </summary>
         public static ProjectInfo Find(IEnumerable<string> roots, string preferred = null)
         {
-            if (!string.IsNullOrEmpty(preferred) && File.Exists(preferred) && IsCosmosCsproj(preferred))
+            if (!string.IsNullOrEmpty(preferred) && File.Exists(preferred) && IsCosmosProject(preferred))
             {
                 return Load(preferred);
             }
             foreach (string root in roots.Where(r => !string.IsNullOrEmpty(r)).Distinct(StringComparer.OrdinalIgnoreCase))
             {
-                foreach (string csproj in FindCsprojFiles(root))
+                foreach (string projectFile in FindProjectFiles(root))
                 {
-                    if (IsCosmosCsproj(csproj))
+                    if (IsCosmosProject(projectFile))
                     {
-                        return Load(csproj);
+                        return Load(projectFile);
                     }
                 }
             }
             return null;
         }
 
-        public static ProjectInfo Load(string csproj) => new ProjectInfo(csproj, ReadTargetArch(Path.GetDirectoryName(csproj)));
+        public static ProjectInfo Load(string projectFile) => new ProjectInfo(projectFile, ReadTargetArch(Path.GetDirectoryName(projectFile)));
 
         public static string ConfigPath(string projectDir) => Path.Combine(projectDir, ".cosmos", "config.json");
 

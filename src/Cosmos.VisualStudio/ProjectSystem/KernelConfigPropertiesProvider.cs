@@ -14,7 +14,7 @@ namespace Cosmos.VisualStudio.ProjectSystem
     /// <summary>
     /// The <see cref="KernelPropertyPages.ConfigPersistence"/> data source: the
     /// properties of the Cosmos pages that live in <c>.cosmos/config.json</c>
-    /// rather than in the csproj, shared with the VS Code extension. Exported
+    /// rather than in the project file, shared with the VS Code extension. Exported
     /// the way the project system exports its own launchSettings.json source.
     /// </summary>
     [Export(KernelPropertyPages.ConfigPersistence, typeof(IProjectPropertiesProvider))]

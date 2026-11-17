@@ -29,6 +29,23 @@ namespace Cosmos.VisualStudio.Tests
 </Project>
 ";
 
+        // What dotnet new cosmos-kernel-vb -n VbKernel writes.
+        private const string Vbproj = @"<Project Sdk=""Cosmos.Sdk/3.0.92"">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- Core kernel packages -->
+  <ItemGroup>
+    <PackageReference Include=""Cosmos.Kernel"" Version=""3.0.92"" />
+    <PackageReference Include=""Cosmos.Kernel.System"" Version=""3.0.92"" />
+  </ItemGroup>
+
+</Project>
+";
+
         [Fact]
         public void ParseReadsFeaturesPackagesAndDefaults()
         {
@@ -144,14 +161,51 @@ namespace Cosmos.VisualStudio.Tests
 
             ProjectInfo found = CosmosProject.Find(new[] { dir.Path });
             Assert.NotNull(found);
-            Assert.Equal(kernel, found!.Csproj);
+            Assert.Equal(kernel, found!.ProjectFile);
             Assert.Equal("Kernel", found.Name);
 
             // A preferred project that isn't a kernel falls back to the search.
             Assert.Equal("Kernel", CosmosProject.Find(new[] { dir.Path }, dir.Combine("App/App.csproj"))!.Name);
 
             string second = dir.Write("Other/Other.csproj", Csproj);
-            Assert.Equal(second, CosmosProject.Find(new[] { dir.Path }, second)!.Csproj);
+            Assert.Equal(second, CosmosProject.Find(new[] { dir.Path }, second)!.ProjectFile);
+        }
+
+        [Fact]
+        public void FindRecognizesVisualBasicKernels()
+        {
+            using var dir = new TempDir();
+            dir.Write("App/App.vbproj", "<Project Sdk=\"Microsoft.NET.Sdk\" />");
+            string kernel = dir.Write("VbKernel/VbKernel.vbproj", Vbproj);
+
+            ProjectInfo found = CosmosProject.Find(new[] { dir.Path });
+            Assert.NotNull(found);
+            Assert.Equal(kernel, found!.ProjectFile);
+            Assert.Equal("VbKernel", found.Name);
+
+            // As cosmos build does, a directory that holds both yields its C# project.
+            string csharp = dir.Write("VbKernel/Zeta.csproj", Csproj);
+            Assert.Equal(csharp, CosmosProject.Find(new[] { dir.Path })!.ProjectFile);
+            Assert.Equal(kernel, CosmosProject.Find(new[] { dir.Path }, kernel)!.ProjectFile);
+        }
+
+        [Fact]
+        public void ParseAndSaveWorkOnAVisualBasicProject()
+        {
+            using var dir = new TempDir();
+            string vbproj = dir.Write("VbKernel/VbKernel.vbproj", Vbproj);
+
+            ProjectProperties props = ProjectConfig.Parse(vbproj);
+            Assert.Equal("VbKernel", props.Name);
+            Assert.Equal("VbKernel.Kernel", props.KernelClass);
+            Assert.True(props.EnableNetwork);
+            Assert.Equal(new[] { "Cosmos.Kernel", "Cosmos.Kernel.System" }, props.Packages.Select(p => p.Name));
+
+            props.EnableNetwork = false;
+            ProjectConfig.Save(vbproj, props);
+
+            Assert.Contains("<CosmosEnableNetwork>false</CosmosEnableNetwork>", File.ReadAllText(vbproj));
+            Assert.False(ProjectConfig.Parse(vbproj).EnableNetwork);
         }
     }
 }

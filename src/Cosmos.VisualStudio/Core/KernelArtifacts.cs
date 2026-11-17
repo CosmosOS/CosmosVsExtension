@@ -73,7 +73,7 @@ namespace Cosmos.VisualStudio.Core
             }
         }
 
-        private static readonly string[] SourceExtensions = { ".cs", ".csproj", ".props", ".targets", ".c", ".h", ".asm", ".s", ".ld", ".conf" };
+        private static readonly string[] SourceExtensions = { ".cs", ".csproj", ".vb", ".vbproj", ".props", ".targets", ".c", ".h", ".asm", ".s", ".ld", ".conf" };
 
         private static readonly HashSet<string> SkippedDirectories = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {

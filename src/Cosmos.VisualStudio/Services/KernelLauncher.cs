@@ -234,7 +234,7 @@ namespace Cosmos.VisualStudio.Services
                 bool outOfDate = await Task.Run(() =>
                     KernelArtifacts.IsBuildOutOfDate(target.ProjectDir, target.Arch) ||
                     (forDebug && KernelArtifacts.ResolveKernelElf(target.RootDirs, target.ProjectDir, target.Name, target.Arch) == null));
-                return !outOfDate || await package.Builder.BuildAsync(target.Csproj, target.Arch, configuration);
+                return !outOfDate || await package.Builder.BuildAsync(target.ProjectFile, target.Arch, configuration);
             }
 
             if (hasIso)
@@ -245,7 +245,7 @@ namespace Cosmos.VisualStudio.Services
             {
                 return false;
             }
-            return await package.Builder.BuildAsync(target.Csproj, target.Arch, configuration);
+            return await package.Builder.BuildAsync(target.ProjectFile, target.Arch, configuration);
         }
 
         /// <summary>One kernel at a time: offers to stop the running one.</summary>
