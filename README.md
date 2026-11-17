@@ -6,7 +6,7 @@ Visual Studio extension for [Cosmos gen3](https://github.com/valentinbreiz/nativ
 
 Available from the **Cosmos** menu (under Extensions), the **Cosmos OS** tool window, the project's context menu in Solution Explorer, and F5 / Ctrl+F5:
 
-- New kernel project from the `cosmos-kernel` template, in a new solution or added to the open one
+- New kernel project in C# or Visual Basic, from the `cosmos-kernel-csharp` and `cosmos-kernel-vb` templates, in a new solution or added to the open one
 - Build the kernel through `cosmos build`, with errors and warnings in the Error List
 - Run it in QEMU through `cosmos run`, the serial console streaming into the Output window
 - Debug with GDB through Visual Studio's debugger

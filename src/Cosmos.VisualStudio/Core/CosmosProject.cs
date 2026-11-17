@@ -31,7 +31,7 @@ namespace Cosmos.VisualStudio.Core
         public const int MaxSearchDepth = 3;
 
         /// <summary>The project files a kernel can have, in the order <c>cosmos build</c> searches a directory: C#, then Visual Basic.</summary>
-        public static readonly IReadOnlyList<string> ProjectExtensions = new[] { ".csproj", ".vbproj" };
+        public static readonly IReadOnlyList<string> ProjectExtensions = KernelLanguage.All.Select(language => language.ProjectExtension).ToArray();
 
         public static bool IsProjectFile(string path) =>
             ProjectExtensions.Contains(Path.GetExtension(path), StringComparer.OrdinalIgnoreCase);

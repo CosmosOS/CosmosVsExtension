@@ -126,7 +126,7 @@ namespace Cosmos.VisualStudio.ToolWindows
         {
             var welcome = new StackPanel { Margin = new Thickness(0, 10, 0, 0) };
             welcome.Children.Add(Theme.Text("Welcome to Cosmos OS Development!", bold: true, size: 14));
-            TextBlock line = Theme.Text("Create your first bare-metal C# kernel.", gray: true);
+            TextBlock line = Theme.Text("Create your first bare-metal kernel, in C# or Visual Basic.", gray: true);
             line.Margin = new Thickness(0, 6, 0, 10);
             welcome.Children.Add(line);
             Button create = Theme.Button("Create Kernel Project", () => Invoke(PackageIds.NewProject), KnownMonikers.AddItem);

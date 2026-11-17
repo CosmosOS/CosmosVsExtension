@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using Cosmos.VisualStudio.Core;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
@@ -13,12 +14,13 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Cosmos.VisualStudio.UI
 {
-    /// <summary>Asks for the new kernel's name, architecture and location.</summary>
+    /// <summary>Asks for the new kernel's name, language, architecture and location.</summary>
     internal sealed class NewProjectDialog : DialogWindow
     {
         private static readonly Regex ValidName = new Regex("^[a-zA-Z][a-zA-Z0-9_]*$");
 
         private readonly TextBox nameBox;
+        private readonly ComboBox languageBox;
         private readonly ComboBox archBox;
         private readonly TextBox locationBox;
         private readonly CheckBox subfolderBox;
@@ -43,13 +45,21 @@ namespace Cosmos.VisualStudio.UI
             root.SetResourceReference(BackgroundProperty, ThemedDialogColors.WindowPanelBrushKey);
             SetResourceReference(BackgroundProperty, ThemedDialogColors.WindowPanelBrushKey);
 
-            TextBlock intro = Theme.Text("Create a bare-metal C# kernel from the cosmos-kernel template.", gray: true);
+            TextBlock intro = Theme.Text("Create a bare-metal kernel in C# or Visual Basic from the Cosmos kernel templates.", gray: true);
             intro.Margin = new Thickness(0, 0, 0, 14);
             root.Children.Add(intro);
 
             nameBox = new TextBox { Text = "MyKernel" };
             nameBox.TextChanged += (s, e) => Validate();
             root.Children.Add(Theme.Field("Project name", nameBox));
+
+            languageBox = new ComboBox();
+            foreach (KernelLanguage language in KernelLanguage.All)
+            {
+                languageBox.Items.Add(new ComboBoxItem { Content = language.Name, Tag = language });
+            }
+            languageBox.SelectedIndex = 0;
+            root.Children.Add(Theme.Field("Language", languageBox));
 
             archBox = new ComboBox();
             archBox.Items.Add(new ComboBoxItem { Content = "x64 — Intel/AMD 64-bit (recommended for most users)", Tag = "x64" });
@@ -109,6 +119,8 @@ namespace Cosmos.VisualStudio.UI
         }
 
         public string ProjectName => nameBox.Text.Trim();
+
+        public KernelLanguage KernelLanguage => (languageBox.SelectedItem as ComboBoxItem)?.Tag as KernelLanguage ?? KernelLanguage.CSharp;
 
         public string Architecture => (archBox.SelectedItem as ComboBoxItem)?.Tag as string ?? "x64";
 
